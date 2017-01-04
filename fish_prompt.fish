@@ -31,12 +31,34 @@ function fish_prompt
   set -g __fish_git_prompt_showuntrackedfiles true
   set -g __fish_git_prompt_showstashstate true
   set -g __fish_git_prompt_show_informative_status true
-  
+
   # Line 1
   echo -n $cyan'┌['$white$USER$cyan'@'$white$__fish_prompt_hostname$cyan']'$white'-'$cyan'('$white(prompt_pwd)$cyan')'
   __fish_git_prompt "-[git://%s]-"
-  echo
+  switch $fish_bind_mode
+    case default
+      set_color --bold --background red white
+      echo '[N]'
+    case insert
+      set_color --bold --background green white
+      echo '[I]'
+    case visual
+      set_color --bold --background magenta white
+      echo '[V]'
+  end
+  set_color normal
+  echo -n
 
   # Line 2
   echo -n $cyan'└'$__fish_prompt_char $normal
+end
+
+function fish_right_prompt
+  if test $status -eq 0
+    set_color 555
+  else
+    set_color red
+  end
+  date "+%H:%M:%S"
+  set_color normal
 end
